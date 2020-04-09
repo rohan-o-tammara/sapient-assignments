@@ -1,2 +1,2 @@
-# sapient-udemy-assignments
+# sapient-assignments
 Sapient PJP Assignments
