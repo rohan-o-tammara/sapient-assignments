@@ -1,11 +1,14 @@
 node {
     def commit_id
-    stage('Prep') {
+    def mvnHome
+    stage('Preperation') {
         checkout scm
         sh "git rev-parse --short HEAD > .git/commit-id"
         commit_id = readFile('.git/commit-id').trim()
+        
+        mvnHome = tool 'M3'
     }
     stage('Build') {
-        sh "mvn archetype:generate -DgroupId=sapient.tutorial.maven -DartifactId=maven-tutorial-example -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false"
+        sh "'${mvnHome}/bin/mvn' archetype:generate -DgroupId=sapient.tutorial.maven -DartifactId=maven-tutorial-example -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false"
     }
 }
