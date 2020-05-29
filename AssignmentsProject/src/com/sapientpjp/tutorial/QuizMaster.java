@@ -11,6 +11,7 @@ class TimeoutDaemon extends Thread {
     public void run(){
         try {
             Thread.sleep(5000);
+            System.out.println("");
             this.interrupt();
         }
         catch (InterruptedException e){
@@ -22,18 +23,25 @@ class TimeoutDaemon extends Thread {
 class AnswerPrompt extends Thread {
 
     private String answer;
+    Scanner scanner = new Scanner(System.in);
 
     AnswerPrompt(String ans) {
         answer = ans;
     }
 
     public void run() {
-        Scanner scanner = new Scanner(System.in);
-        String choice = scanner.nextLine();
-        if (choice.equals(answer)) {
-            QuizMaster.score += 1;
+        try {
+            String choice = scanner.nextLine();
+            if (choice.toUpperCase().equals(answer)) {
+                QuizMaster.score += 1;
+            }
+            Thread.sleep(0);
+            this.interrupt();
         }
-        this.interrupt();
+        catch (InterruptedException e) {
+            scanner.close();
+            Thread.currentThread().interrupt();
+        }
     }
 }
 
@@ -60,7 +68,7 @@ public class QuizMaster {
             String answer = answers.get(question);
 
             // Display question
-            System.out.println("\n" + question + "?");
+            System.out.println(question + "?");
             options.forEach(System.out::println);
             System.out.print("Your answer ? : ");
 
@@ -80,8 +88,9 @@ public class QuizMaster {
                     break;
                 }
             }
+
         }
 
-        System.out.printf("\nFinal Score = %d", score).println();
+        System.out.printf("Final Score = %d", score).println();
     }
 }
